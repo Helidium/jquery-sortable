@@ -431,7 +431,8 @@
     destroy: function () {
       // TODO iterate over subgroups and destroy them
       // TODO remove all events
-      containerGroups[this.options.group] = undefined
+      delete containerGroups[this.options.group];
+      //containerGroups[this.options.group] = undefined
     }
   }
 
@@ -446,6 +447,8 @@
 
     var itemPath = this.rootGroup.options.itemPath,
     target = itemPath ? this.el.find(itemPath) : this.el
+
+    this.target = target;
 
     target.on(eventNames.start, this.handle, $.proxy(this.dragInit, this))
 
@@ -614,6 +617,8 @@
       return this._serialize(this.el, true)
     },
     destroy: function () {
+      this.target.off( eventNames.start );
+      this.group.containers = [];
       this.rootGroup.destroy()
     }
   }
